@@ -47,3 +47,8 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# Draft scripts
+create_reports.R
+rewrite.R
+main.R

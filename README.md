@@ -1,2 +1,2 @@
 # report_generator
-Tool om met behulp van officer package PowerPoint in bulk rapportages te genereren
+Tool om met behulp van officer package PowerPoint in bulk rapportages te genereren. Deze repo is een volledige rewrite van https://github.com/ggdatascience/reports_excel_to_powerpoint.
