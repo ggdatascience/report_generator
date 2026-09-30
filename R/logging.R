@@ -50,7 +50,8 @@ issues_assert_none <- function(issues) {
   rlang::abort(
     message = c(
       paste0(n_errors, " fout(en) gevonden in de configuratie."),
-      i = "Bekijk alle problemen met: rlang::last_error()$issues"
+      issues_format(issues),
+      i = "Alle problemen: rlang::last_error()$issues"
     ),
     class  = "issues_error",
     issues = issues
@@ -61,8 +62,42 @@ issues_has_errors <- function(issues) {
   any(issues$severity == "error", na.rm = TRUE)
 }
 
-issues_format <- function(issues) {
+issues_format <- function(issues, max_n = 10) {
   
+  if (nrow(issues) == 0) return(character(0))
+  
+  # errors eerst, dan warnings; binnen severity blijft de oorspronkelijke volgorde
+  issues <- issues[order(match(issues$severity, c("error", "warning"))), ]
+  
+  shown <- utils::head(issues, max_n)
+  
+  lines <- vapply(seq_len(nrow(shown)), function(i) {
+    issue_location(shown[i, ])
+    loc <- issue_location(shown[i, ])
+    if (nzchar(loc)) paste0("[", loc, "] ", shown$message[i]) else shown$message[i]
+  }, character(1))
+  
+  names(lines) <- ifelse(shown$severity == "error", "x", "!")
+  
+  n_more <- nrow(issues) - nrow(shown)
+  if (n_more > 0) {
+    lines <- c(lines, c(" " = paste0("\u2026 en ", n_more, " meer")))
+  }
+  
+  lines
+}
+
+issue_location <- function(issue) {
+  
+  parts <- c(
+    if (!is.na(issue$table))        issue$table,
+    if (!is.na(issue$row))          paste("rij", issue$row),
+    if (!is.na(issue$column))       paste("kolom", issue$column),
+    if (!is.na(issue$report_id))    paste("rapport", issue$report_id),
+    if (!is.na(issue$slide_number)) paste("slide", issue$slide_number)
+  )
+  
+  paste(parts, collapse = ", ")
 }
 
 run_checks <- function(input, checks) {

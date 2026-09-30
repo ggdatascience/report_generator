@@ -14,18 +14,4 @@ read_config <- function(path) {
 }
 
 
-validate_config <- function(path) {
-  
-  config_file_issues <- validate_config_file(path)
-  
-  if(issues_has_errors(config_file_issues)) {
-    
-    issues_assert_none(config_file_issues)
-    
-  }
-  
-  config <- read_config(path)
-  
-  validate_config_tables(config)
-  
-}
+
