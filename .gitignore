@@ -48,7 +48,7 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 
-# Draft scripts
-create_reports.R
-rewrite.R
-main.R
+# Project .md files
+AGENTS.md
+PROJECT_ROADMAP.md
+software_design_document.md
